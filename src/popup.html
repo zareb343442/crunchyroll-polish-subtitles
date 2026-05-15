@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Polish AI Subtitles</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+        sans-serif;
+      width: 400px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+    }
+
+    .container {
+      padding: 20px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .toggle-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .toggle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .toggle-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .toggle-switch {
+      width: 44px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .toggle-switch.active {
+      background: #4ade80;
+    }
+
+    .settings-section {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .settings-section h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .setting-item {
+      margin-bottom: 12px;
+    }
+
+    .setting-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .setting-label {
+      font-size: 13px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input[type='range'],
+    input[type='color'],
+    select {
+      width: 100%;
+      padding: 8px;
+      border: none;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    input[type='range'] {
+      padding: 0;
+      height: 6px;
+    }
+
+    input[type='color'] {
+      padding: 2px;
+      height: 40px;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 6px;
+      background: #ef4444;
+    }
+
+    .status-indicator.active {
+      background: #4ade80;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    button {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-primary {
+      background: #4ade80;
+      color: #000;
+    }
+
+    .btn-primary:hover {
+      background: #22c55e;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .info-box {
+      background: rgba(59, 130, 246, 0.2);
+      border-left: 3px solid #3b82f6;
+      padding: 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+
+    .model-status {
+      font-size: 12px;
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎌 Polish Subtitles</h1>
+      <p>AI-powered Japanese to Polish translation</p>
+    </div>
+
+    <div class="toggle-section">
+      <div class="toggle-item">
+        <span class="toggle-label">
+          <span class="status-indicator" id="status-indicator"></span>
+          Extension Status
+        </span>
+        <button class="toggle-switch" id="toggle-enabled"></button>
+      </div>
+    </div>
+
+    <div class="info-box" id="model-info">
+      Models loading...
+    </div>
+
+    <div class="settings-section">
+      <h3>Display Settings</h3>
+
+      <div class="setting-item">
+        <label class="setting-label">Font Size: <span id="font-size-value">20</span>px</label>
+        <input type="range" id="font-size" min="12" max="40" value="20" />
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">Subtitle Color</label>
+        <input type="color" id="font-color" value="#ffffff" />
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">Opacity: <span id="opacity-value">100</span>%</label>
+        <input type="range" id="opacity" min="0" max="100" value="100" />
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">Position</label>
+        <select id="position">
+          <option value="bottom">Bottom</option>
+          <option value="middle">Middle</option>
+          <option value="top">Top</option>
+        </select>
+      </div>
+
+      <div class="setting-item">
+        <label class="setting-label">Subtitle Delay (ms): <span id="delay-value">0</span></label>
+        <input type="range" id="delay" min="-1000" max="1000" value="0" step="100" />
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Content Settings</h3>
+
+      <div class="toggle-item">
+        <span class="toggle-label">Show Japanese</span>
+        <button class="toggle-switch active" id="toggle-japanese"></button>
+      </div>
+
+      <div class="toggle-item">
+        <span class="toggle-label">Show Polish</span>
+        <button class="toggle-switch active" id="toggle-polish"></button>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-secondary" id="btn-reset">Reset</button>
+      <button class="btn-primary" id="btn-save">Save Settings</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
